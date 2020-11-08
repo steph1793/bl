@@ -2,7 +2,7 @@
 layout: post
 title:  "Point-Based Deep Learning methods for 3D point cloud processing"
 date:   2020-10-28
-description: "Add a description"
+description: "An analysis of two deep learning point based methods : PointNet a,d PointNet++."
 ---
 
 <div style="font-size: 0.8em; text-align: justify;" markdown=1>
