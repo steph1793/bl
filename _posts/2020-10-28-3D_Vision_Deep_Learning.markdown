@@ -38,18 +38,18 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
 ### Table of Contents
 
 * <a href="{% link _posts/2020-10-28-3D_point_based.markdown %}">MLP Point based methods</a>
-  * <a href="https://google.com"> PointNet</a>
-  * <a href="https://google.com"> PointNet++</a>
-* <a href="https://google.com"> Convolution Point Based methods</a>
-  * <a href="https://google.com"> PointCNN</a>
-  * <a href="https://google.com"> KPConv</a>
-* <a href="https://google.com"> Point-Voxel Based methods</a>
-  * <a href="https://google.com"> PVCNN</a>
-* <a href="https://google.com"> Multi-Modal Based methods</a>
-  * <a href="https://google.com"> MVPNet</a>
-* <a href="https://google.com"> Sparse Convolution Based methods</a>
-  * <a href="https://google.com"> Minkowski</a>
-  * <a href="https://google.com"> SPVCNN/SPVNAS</a>
+  * <a href="{% link _posts/2020-10-28-3D_point_based.markdown %}"> PointNet</a>
+  * <a href="{% link _posts/2020-10-28-3D_point_based.markdown %}"> PointNet++</a>
+* <a href="{% link _posts/2020-11-08-3D_point_convolution.markdown %}"> Convolution Point Based methods</a>
+  * <a href="{% link _posts/2020-11-08-3D_point_convolution.markdown %}"> PointCNN</a>
+  * <a href=""> KPConv</a>
+* <a href="{% link _posts/2020-11-08-3D_pointvoxel_based.markdown %}"> Point-Voxel Based methods</a>
+  * <a href="{% link _posts/2020-11-08-3D_pointvoxel_based.markdown %}"> PVCNN</a>
+* <a href="{% link _posts/2020-11-08-3D_mvpnet.markdown %}"> Multi-Modal Based methods</a>
+  * <a href="{% link _posts/2020-11-08-3D_mvpnet.markdown %}"> MVPNet</a>
+* <a href=""> Sparse Convolution Based methods</a>
+  * <a href=""> Minkowski</a>
+  * <a href=""> SPVCNN/SPVNAS</a>
 
 
 <br>
@@ -59,7 +59,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
 <br>
 
 <textarea id="bibtex_input" style="display:none;">
-@misc{guo2020deep,
+@misc{1,
       title={Deep Learning for 3D Point Clouds: A Survey}, 
       author={Yulan Guo and Hanyun Wang and Qingyong Hu and Hao Liu and Li Liu and Mohammed Bennamoun},
       year={2020},
@@ -70,7 +70,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
 }
 }
 
-@inproceedings{su2015multi,
+@inproceedings{2,
   title={Multi-view convolutional neural networks for 3d shape recognition},
   author={Su, Hang and Maji, Subhransu and Kalogerakis, Evangelos and Learned-Miller, Erik},
   booktitle={Proceedings of the IEEE international conference on computer vision},
@@ -78,7 +78,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
   year={2015},
   pos={2}
 }
-@article{leng20153d,
+@article{3,
   title={3D object retrieval with stacked local convolutional autoencoder},
   author={Leng, Biao and Guo, Shuang and Zhang, Xiangyang and Xiong, Zhang},
   journal={Signal Processing},
@@ -89,7 +89,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
   pos={3}
 }
 
-@inproceedings{bai2016gift,
+@inproceedings{4,
   title={Gift: A real-time and scalable 3d shape search engine},
   author={Bai, Song and Bai, Xiang and Zhou, Zhichao and Zhang, Zhaoxiang and Jan Latecki, Longin},
   booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -98,7 +98,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
   pos={4}
 }
 
-@article{krizhevsky2017imagenet,
+@article{5,
   title={Imagenet classification with deep convolutional neural networks},
   author={Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
   journal={Communications of the ACM},
@@ -110,7 +110,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
   pos={5}
 }
 
-@INPROCEEDINGS{7353481,
+@INPROCEEDINGS{6,
   author={D. {Maturana} and S. {Scherer}},
   booktitle={2015 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, 
   title={VoxNet: A 3D Convolutional Neural Network for real-time object recognition}, 
@@ -122,7 +122,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
   pos={6}
 }
 
-@INPROCEEDINGS{8578570,
+@INPROCEEDINGS{7,
   author={Y. {Zhou} and O. {Tuzel}},
   booktitle={2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition}, 
   title={VoxelNet: End-to-End Learning for Point Cloud Based 3D Object Detection}, 
@@ -134,7 +134,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
   pos={7}
 }
 
-@article{wang2019dynamic,
+@article{8,
   title={Dynamic graph cnn for learning on point clouds},
   author={Wang, Yue and Sun, Yongbin and Liu, Ziwei and Sarma, Sanjay E and Bronstein, Michael M and Solomon, Justin M},
   journal={Acm Transactions On Graphics (tog)},
@@ -146,7 +146,7 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
   pos={10}
 }
 
-@INPROCEEDINGS{8099499,
+@INPROCEEDINGS{9,
 author={R. Q. {Charles} and H. {Su} and M. {Kaichun} and L. J. {Guibas}},
 booktitle={2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, title={PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation},
 year={2017},
@@ -157,7 +157,7 @@ doi={10.1109/CVPR.2017.16},
 pos={11}}
 }
 
-@inproceedings{qi2017pointnet++,
+@inproceedings{10++,
   title={Pointnet++: Deep hierarchical feature learning on point sets in a metric space},
   author={Qi, Charles Ruizhongtai and Yi, Li and Su, Hao and Guibas, Leonidas J},
   booktitle={Advances in neural information processing systems},
@@ -166,9 +166,9 @@ pos={11}}
   pos={12}
 }
 
-@INPROCEEDINGS{9010002,  author={H. {Thomas} and C. R. {Qi} and J. {Deschaud} and B. {Marcotegui} and F. {Goulette} and L. {Guibas}},  booktitle={2019 IEEE/CVF International Conference on Computer Vision (ICCV)},   title={KPConv: Flexible and Deformable Convolution for Point Clouds},   year={2019},  volume={},  number={},  pages={6410-6419},  doi={10.1109/ICCV.2019.00651}, pos={13}}
+@INPROCEEDINGS{11,  author={H. {Thomas} and C. R. {Qi} and J. {Deschaud} and B. {Marcotegui} and F. {Goulette} and L. {Guibas}},  booktitle={2019 IEEE/CVF International Conference on Computer Vision (ICCV)},   title={KPConv: Flexible and Deformable Convolution for Point Clouds},   year={2019},  volume={},  number={},  pages={6410-6419},  doi={10.1109/ICCV.2019.00651}, pos={13}}
 
-@incollection{NIPS2018_7362,
+@incollection{12,
 title = {PointCNN: Convolution On X-Transformed Points},
 author = {Li, Yangyan and Bu, Rui and Sun, Mingchao and Wu, Wei and Di, Xinhan and Chen, Baoquan},
 booktitle = {Advances in Neural Information Processing Systems 31},
@@ -179,7 +179,7 @@ publisher = {Curran Associates, Inc.},
 pos={14}
 }
 
-@inproceedings{Liu2019PointVoxelCF,
+@inproceedings{13,
   title={Point-Voxel CNN for Efficient 3D Deep Learning},
   author={Zhijian Liu and Haotian Tang and Yujun Lin and Song Han},
   booktitle={NeurIPS},
@@ -187,7 +187,7 @@ pos={14}
   pos={15}
 }
 
-@inproceedings{jaritz2019multi,
+@inproceedings{14,
   title={Multi-view pointnet for 3d scene understanding},
   author={Jaritz, Maximilian and Gu, Jiayuan and Su, Hao},
   booktitle={Proceedings of the IEEE International Conference on Computer Vision Workshops},
@@ -196,7 +196,7 @@ pos={14}
   pos={16}
 }
 
-@misc{choy20194d,
+@misc{15,
       title={4D Spatio-Temporal ConvNets: Minkowski Convolutional Neural Networks}, 
       author={Christopher Choy and JunYoung Gwak and Silvio Savarese},
       year={2019},
@@ -206,7 +206,7 @@ pos={14}
       pos={17}
 }
 
- @inproceedings{tang2020searching,
+ @inproceedings{16,
     title     = {Searching Efficient 3D Architectures with Sparse Point-Voxel Convolution},
     author    = {Tang, Haotian* and Liu, Zhijian* and Zhao, Shengyu and Lin, Yujun and Lin, Ji and Wang, Hanrui and Han, Song},
     booktitle = {European Conference on Computer Vision},
@@ -214,7 +214,7 @@ pos={14}
     pos={18}
  } 
 
- @article{mdpi1111,
+ @article{17,
  	title={Review: Deep Learning on 3D Point Clouds},
  	author={Bello Saifullahi A. and Yu Shangshu and Wang Cheng and Adam Jibril M. and Li Jonathan},
  	journal={Remote Sensing},

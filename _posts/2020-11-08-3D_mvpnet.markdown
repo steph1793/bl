@@ -1,0 +1,280 @@
+---
+layout: post
+title:  "MVPNet : Multi-View PointNet for 3D Understanding"
+date:   2020-11-08
+description: "A multimodal deep learning model for point cloud processing"
+---
+
+<div style="font-size: 0.8em; text-align: justify;" markdown=1>
+
+<center>
+<div id="figure1">
+  <figure  style="width:100%; margin:0;">
+  <img src="{{ '/assets/img/mvpnet_fig1.PNG' | prepend: site.baseurl }}" alt="" style=""> 
+  <center  style="font-style: initial;"><b></b> </center>
+</figure>
+</div>
+</center>
+<br>
+<p>2D images and 3D point clouds lie in different spaces, yet they contain complementary information. It is stated in <a href="#references">[1]</a>, that extensive experiments have shown the benefits of leveraging features from dense images and reveal superior robustness to varying point cloud density compared to 3D only methods. Fusing 2D and 3D data allows to leverage information from both sources. <br>
+However, there is no pixel to point direct mapping between 2D and 3D data making this task challenging. Also, only 5.9% of the pixels are covered by a Velodyne HDL-64 point cloud <a href="#references">[1]</a> : 3D point clouds are very sparse.<br>
+In this architecture, the authors proposed to use a neural network to lift the 2D images into a 3D space and then adaptively aggregate them into the original point cloud. The result is further processed by a PointNet++ <a href="#references">[1]</a> to output features per points for segmentation. We will see in the folllowing lines how the lifted 2D images bring much more contextual information to the original spare point cloud thanks to the receptive field of the lifting network.</p>
+
+
+## MVPNet : Model
+
+
+<center>
+<div id="figure2">
+  <figure  style="width:100%; margin:0;">
+  <img src="{{ '/assets/img/mvpnet_model.PNG' | prepend: site.baseurl }}" alt="" style=""> 
+  <center  style="font-style: initial;"><b>Figure 2. </b>MVPNet overall architecture </center>
+</figure>
+</div>
+</center>
+<br>
+MVPNet is a model designed to fuse 2D images into 3D point clouds for better scene segmentation. The algorithm starts by splitting the scene into chunks of size 1.5m x 1.5m. The chunks are processed one by one by MVPNet. The model illustrated in <a href="#figure2">Figure 2</a>, folds as follow:
+* **View Selection** : This step is crucial to select **from a video stream** of the scene, the image frames that correspond to the chunk being processed. For each chunk, M different images of size **160 x 120 pixels** are selected using a **greedy algorithm**. This algorithm identifies the M depth RGB-D images that overlap the most with the point cloud.<br><br>
+* **2D-3D feature lifting module** : Once the M images are selected, they are processed through a **2D Encoder-Decoder U-Net<a href="#references">[10]</a>**  to build features for each pixel. The U-Net architecture will yield M outputs for the **M images of size 160 x 120 x $C_{feat}$**, where $C_{feat}$ is the dimention of the pixels encoding vectors. For each image, 8192 pixels are sampled from the 160x120=19200 pixels and projected in the 3D space using the RGB-D camera instrincics parameters and poses. The **output** of these steps is a **dense point cloud of size $M\*8192$ points** each point having a feature vector built with U-Net.<br>
+At this stage, there are two pointclouds : a **dense point cloud** $\mathcal{S}_ {dense}$ coming from the lifted 2D images, and the **original sparse point cloud** $\mathcal{S}_ {sparse}$, both lying in the same space.<br>
+$\mathcal{S}_ {dense}$ is merged into $\mathcal{S}_ {sparse}$ through an aggregtion layer. This layer produces a new feature vector for each point in $\mathcal{S}_ {sparse}$ by aggregating the features of the K Nearest neighbors from $\mathcal{S}_ {dense}$. The aggregation is done by transforming the features of the neighbors using a shared MLP layer and by summing them.<br>
+At the end of this module, we get our sparse point cloud $\mathcal{S}_ {sparse}$, where each point has been enriched with features coming from RGB-D images. It is worth noticing that the receptive field of the U-Net features is such that each point from $\mathcal{S}_{sparse}$ is now encoded with a denser broader view of the scene from that point.<br><br>
+* **3D Fusion Network** : From the previous module, we get a point cloud with a feature vector per point coming from RGB-D images. To fuse the geometric features (XYZ coordinates) with RGB-D features, a PointNet++ <a href="#references">[2]</a> is used with different strategies as illustrated in <a href="#figure3">Figure 3</a>:
+	<ul style="width: 100%;">
+		<li><b>Early Fusion</b> : Here the images features are concatenated with the geometric features (xyz, normal etc) before they are passed to the encoder of PointNet++ followed by the decoder to output fused encoding vectors for each point.</li>
+		<li><b>Late fusion</b> : Only the geometric data are fed to the PointNet++. The image features are concatenated after PointNet++ right before the segmentation last MLP layers.</li>
+		<li><b>Intermediate fusion</b> : Two Set Abstraction encoders (PointNet++ encoders) are built : one for the geometric features and the second for the image features. A unique Feature Propagation (PointNet++ decoder) leverages the output of both encoders and their intermediate outputs through skip connections. The architecture is similar to a regular PointNet++ except that the skip links of the decoder is made simultaneously with two (02) encoders. The experiments show that early fusion works better.</li>
+	</ul>
+
+
+
+<center>
+<div id="figure3">
+  <figure  style="width:100%; margin:0;">
+  <img src="{{ '/assets/img/mvpnet_fig3.PNG' | prepend: site.baseurl }}" alt="" style=""> 
+  <center  style="font-style: initial;"><b>Figure 3. </b>Fusion architectures based on PointNet++ </center>
+</figure>
+</div>
+</center>
+<br>
+
+
+## MVPNet : Experiments
+
+For the experiments the authors used **ScanNetV2 dataset** <a href="#references">[4]</a> indoor scenes. There are 1201 training scans and 312 validations scans. The model was also evaluated on unseen scans from a different dataset : **S3DIS** <a href="#references">[3]</a>. The backbone of the 2D U-Net is a **VGG-16<a href="#references">[11]</a>**.
+
+<center>
+<div style=" display: table; width: 50%" id= "table1">
+<div markdown="1" style="font-size: 0.6em; width: 30%; align-self: center;  vertical-align: middle; display:table-cell;">
+
+
+|Methods | PointNet++ <a href="#references">[2]</a> | Re-impl. PointNet++| PointCNN <a href="#references">[4]</a> | PointConv <a href="#references">[9]</a> | **SparseConvNet<a href="#references">[8]</a>**  | **MVPNet** |
+|mIOU scores | 33.9 | 44.2 | 45.8 | 55.6 | **72.5** | **64.1** |
+
+</div>
+</div>
+<center style="font-style: initial;"><b>Table 1</b> : Semantic segmentation on ScanNet indoor scenes.</center>
+</center>
+<br>
+Note that in the previous articles, methods like PointCNN, PointNet++ reported scores were the overall accuracy on a per-voxel basis. Here the authors published their performances regarding the IOU score which is more specific than the per-voxel basis accuracy. MVPNet outperforms these  methods with a large margin.
+
+<center>
+<div style=" display: table; width: 50%" id="table2">
+<div markdown="1" style="font-size: 0.6em; width: 30%; align-self: center;  vertical-align: middle; display:table-cell;">
+
+|Methods| PointCNN<a href="#references">[4]</a> | SPG<a href="#references">[7]</a> | PCCN<a href="#references">[6]</a> | PointNet++ Re-impl. <a href="#references">[2]</a> | **MVPNet** |
+|mIoU|  57.26 |  58.04 |  58.27 | 56.19 |  **62.43** |
+
+</div>
+</div>
+<center style="font-style: initial;"><b>Table 2</b> : Semantic segmentation on S3DIS indoor scenes.</center>
+</center>
+<br>
+
+<center>
+<div id="figure4">
+  <figure  style="width:100%; margin:0;">
+  <img src="{{ '/assets/img/mvpnet_qual.PNG' | prepend: site.baseurl }}" alt="" style=""> 
+  <center  style="font-style: initial;"><b>Figure 4. </b>Qualitative results. 'Ours' refers to MVPNet. 'Ours (2D)' concerns an experiment <br>in which the 3D Fusion network used only image features and not xyz geometric coordinates. </center>
+</figure>
+</div>
+</center>
+<br>
+
+
+Despite the better performance of SparseConvNet<a href="#references">[8]</a> in <a href="#table1">Table 1</a>, MVPNet is more robust to point cloud density variations as illustrated in <a href="#figure5">Figure 5</a>.
+
+<center>
+<div id="figure5">
+  <figure  style="width:100%; margin:0;">
+  <img src="{{ '/assets/img/mvpnet_fig4.PNG' | prepend: site.baseurl }}" alt="" style=""> 
+  <center  style="font-style: initial;"><b>Figure 5. </b>Robustness of MVPNet to point cloud density variations compared to SparseConNet</center>
+</figure>
+</div>
+</center>
+<br>
+The robustness to density variations is easily explainable by the fact that each point is enriched with features coming from 2D images. These images are not affected by the density variations of the point clouds and U-net feature extraction allow a high receptive field for each pixel/point. This is not the case in SparseConvNet.
+<br>
+
+
+Also, MVPNet is more efficient than SparseConvNet, <a href="#tabel">Table 4</a>
+
+<center>
+<div style=" display: table; width: 50%" id="table3">
+<div markdown="1" style="font-size: 0.6em; width: 30%; align-self: center;  vertical-align: middle; display:table-cell;">
+|Methods | mIOU | batch size | train time | forward time/scene |
+| SCN (light version) : 2.7M params. <br> SCN (heavy version) : 30.1M params. | 57.5 <br> 6.2 | 32 <br> 4 | 18h <br> >12d | 0.194s <br> 2.21s|
+| MVPNet (3 views) : 0.98M params. <br> MVPNet (5 views) : 0.98M params.| 65.9 <br> 67.3 | 32 <br> 32| 12h <br> 18h | 2.22s <br> 3.35s |
+
+</div>
+</div>
+<center style="font-style: initial;"><b>Table 2</b> : Runtime comparisons with SparseConvNet on GTX 1080 Ti GPU</center>
+</center>
+<br>
+MVPnet is more memory efficient, and faster to train. Though, the inference runtime remains relatively high.
+
+
+#### Further analysis
+* **The number of selected image views** : When using only one (01) view, the coverage of the RGB-D image on the chunk being processed is about 68% and the mIOU about 62. With 3 views, the coverage increases to 93% and so does the mIOU, to 64.5. Further increase of the view, largely increases the coverage but the mIOU score flattens. Thus, 3 views is a good trade off between the computations complexity and a good mIOU score.
+* **Feature Aggregation** : For the 2D-3D aggregation, for each point in $S_{sparse}$,  k neighbors from $S_{dense}$ are gathered and aggregated. The experiments led by the authors showed that **3 neighbors** for each point, aggregated using a **summation** is the best setting.
+* **3D fusion** : For the 2D-3D fusion module, of all the 3 strategies (early, intermediate, late fusion), the early fusion works better. Early fusion reaches the best score with less parameters.
+
+### Conclusion
+In this paper, the authors proposed a method to lift and fuse 2D RGB-D images into 3D point clouds for a better segmentation and understanding of scenes. This line of research is important since both data sources have complementary informations that can be used together. Also, point clouds can be very sparse and enriching them with denser data like RGB-D images can enhance the performances. The model proposed is more robust to point clouds density variations, thanks to the high receptive field it benefits from image features. It outperforms point based methods like PointNet, PointNet++, PointCNN on benchmark indoor datasets (S3DIS, ScanNet). Though, for large scenes, the model processes the scene chunk by chunk, increasing the inference runtime. Methods like SparseConvNet<a href="#references">[8]</a>, can be really heavy and time consuming to train but processes the whole scene at once, with a much smaller inference runtime and better performances.
+
+
+
+### References
+<br>
+
+<textarea id="bibtex_input" style="display:none;">
+@misc{mvpnet,
+      title={Multi-view PointNet for 3D Scene Understanding}, 
+      author={Maximilian Jaritz and Jiayuan Gu and Hao Su},
+      year={2019},
+      eprint={1909.13603},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      pos={1}
+}
+
+
+@inproceedings{qi2017pointnet++,
+  title={Pointnet++: Deep hierarchical feature learning on point sets in a metric space},
+  author={Qi, Charles Ruizhongtai and Yi, Li and Su, Hao and Guibas, Leonidas J},
+  booktitle={Advances in neural information processing systems},
+  pages={5099--5108},
+  year={2017},
+  pos={2}
+}
+
+
+
+@INPROCEEDINGS{s3dis,  author={I. {Armeni} and O. {Sener} and A. R. {Zamir} and H. {Jiang} and I. {Brilakis} and M. {Fischer} and S. {Savarese}},  booktitle={2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},   title={3D Semantic Parsing of Large-Scale Indoor Spaces},   year={2016},  volume={},  number={},  pages={1534-1543},  doi={10.1109/CVPR.2016.170},
+pos={3}}
+
+@misc{pointcnn,
+      title={PointCNN: Convolution On X-Transformed Points}, 
+      author={Yangyan Li and Rui Bu and Mingchao Sun and Wei Wu and Xinhan Di and Baoquan Chen},
+      year={2018},
+      eprint={1801.07791},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      pos={4}
+}
+
+
+@misc{scannet,
+      title={ScanNet: Richly-annotated 3D Reconstructions of Indoor Scenes}, 
+      author={Angela Dai and Angel X. Chang and Manolis Savva and Maciej Halber and Thomas Funkhouser and Matthias Nießner},
+      year={2017},
+      eprint={1702.04405},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+pos={5}
+}
+
+@INPROCEEDINGS{pccn,  author={S. {Wang} and S. {Suo} and W. {Ma} and A. {Pokrovsky} and R. {Urtasun}},  booktitle={2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition},   title={Deep Parametric Continuous Convolutional Neural Networks},   year={2018},  volume={},  number={},  pages={2589-2597},  doi={10.1109/CVPR.2018.00274}, pos={6}}
+
+@misc{spg,
+      title={Large-scale Point Cloud Semantic Segmentation with Superpoint Graphs}, 
+      author={Loic Landrieu and Martin Simonovsky},
+      year={2018},
+      eprint={1711.09869},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      pos={7}
+}
+
+
+@misc{scn,
+      title={3D Semantic Segmentation with Submanifold Sparse Convolutional Networks}, 
+      author={Benjamin Graham and Martin Engelcke and Laurens van der Maaten},
+      year={2017},
+      eprint={1711.10275},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      pos={8}
+}
+
+@inproceedings{pointconv,
+author = {Wu, Wenxuan and Qi, Zhongang and Li, Fuxin},
+year = {2019},
+month = {06},
+pages = {9613-9622},
+title = {PointConv: Deep Convolutional Networks on 3D Point Clouds},
+doi = {10.1109/CVPR.2019.00985},
+pos={9}
+}
+
+
+@misc{ronneberger2015unet,
+      title={U-Net: Convolutional Networks for Biomedical Image Segmentation}, 
+      author={Olaf Ronneberger and Philipp Fischer and Thomas Brox},
+      year={2015},
+      eprint={1505.04597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      pos={10}
+}
+
+@misc{simonyan2015deep,
+      title={Very Deep Convolutional Networks for Large-Scale Image Recognition}, 
+      author={Karen Simonyan and Andrew Zisserman},
+      year={2015},
+      eprint={1409.1556},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      pos={11}
+}
+</textarea>
+
+<div class="bibtex_template" style="">
+	<table style="border: none; margin-top: -30px;">
+		<td style="vertical-align:top; border:none; width: 50px;"> [<span class="pos"></span>]
+		</td>
+	<td>
+	
+  <div class="if author" style="font-weight: bold;">	
+	<div >
+		<span class="if year">
+			<span class="year"></span>, 
+		</span>
+		<span class="author"></span>
+		<span class="if url" style="margin-left: 20px">
+		  <a class="url" style="color:black; font-size:10px">(view online)</a>
+		</span>
+		</div>
+	</div>
+  <div style="">
+    <span class="title"></span>
+  </div>
+</td>
+</table>
+
+</div>
+<p id="bibtex_display"></p>
+
+
+
+</div>

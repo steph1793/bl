@@ -11,7 +11,7 @@ In this article, we are going to discuss two (02) point based Deep Learning meth
 
 
 ## PointNet
-
+<div id="pointnet"></div>
 
 <center>
 <div id="figure1">
@@ -196,7 +196,7 @@ The experiment is done on the **Stanford 3D dataset <a href="#references">[9]</a
 
 
 
-
+<div id="pointnet++"></div>
 ## PointNet++
 <center>
 <div id="figure6">
