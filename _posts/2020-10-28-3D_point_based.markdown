@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Point-Based Deep Learning methods for 3D point cloud processing"
+title:  "Deep Learning on 3D Point Clouds - Part II"
 date:   2020-10-28
-description: "An analysis of two deep learning point based methods : PointNet a,d PointNet++."
+description: "An analysis of two deep learning point based methods for point cloud processing : PointNet & PointNet++."
 ---
 
 <div style="font-size: 0.8em; text-align: justify;" markdown=1>
