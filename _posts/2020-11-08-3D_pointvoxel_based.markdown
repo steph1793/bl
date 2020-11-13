@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Deep Learning on 3D Point Clouds processing - Part V"
+title:  "Deep Learning for 3D Point Clouds processing - Part V : PVCNN"
 date:   2020-11-08
 description: "An efficient Deep Learning method joining voxel based and point based approaches : PVCNN"
 ---
