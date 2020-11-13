@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Deep Learning on 3D Point Clouds - Introduction"
+title:  "Deep Learning on 3D Point Clouds - Part I"
 date:   2020-10-28
 description: A walkthrough 3D LIDAR point clouds processing in computer vision with Deep Learning methods for semantic segmentation. An in-depth analysis of some architectures and an introduction to Neural Architecture Search in 3D Computer Vision.
 ---
