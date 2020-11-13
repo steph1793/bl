@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "MVPNet : Multi-View PointNet for 3D Understanding"
+title:  "Deep Learning on 3D Point Clouds - Part III"
 date:   2020-11-08
-description: "A multimodal deep learning model for point cloud processing"
+description: "A multimodal deep learning model for 3D scene Understanding : MVPNet - Multi-View PointNet"
 ---
 
 <div style="font-size: 0.8em; text-align: justify;" markdown=1>
