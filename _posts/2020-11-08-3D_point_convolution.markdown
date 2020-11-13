@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "PointCNN : Point Convolution Based Method"
+title:  "Deep Learning on 3D Point Clouds - Part IV"
 date:   2020-11-08
-description: "An analysis of the first point convolution based method for point cloud processing."
+description: "An analysis of the first point convolution based method for point cloud processing : PointCNN"
 ---
 
 <div style="font-size: 0.8em; text-align: justify;" markdown=1>
