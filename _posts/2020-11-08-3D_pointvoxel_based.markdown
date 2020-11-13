@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Point Voxel Convolution Neural Network (PVCNN)"
+title:  "Deep Learning on 3D Point Clouds processing - Part V"
 date:   2020-11-08
-description: "An efficient Deep Learning method joining voxel based and point based approaches"
+description: "An efficient Deep Learning method joining voxel based and point based approaches : PVCNN"
 ---
 
 <div style="font-size: 0.8em; text-align: justify;" markdown=1>
