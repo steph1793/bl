@@ -37,16 +37,16 @@ The previous lines were a brief overview of Deep Learning in point clouds proces
 
 ### Table of Contents
 
-* <a href="{% link _posts/2020-10-28-3D_point_based.markdown %}">MLP Point based methods</a>
-  * <a href="{% link _posts/2020-10-28-3D_point_based.markdown %}"> PointNet</a>
-  * <a href="{% link _posts/2020-10-28-3D_point_based.markdown %}"> PointNet++</a>
-* <a href="{% link _posts/2020-11-08-3D_point_convolution.markdown %}"> Convolution Point Based methods</a>
-  * <a href="{% link _posts/2020-11-08-3D_point_convolution.markdown %}"> PointCNN</a>
+* <a href="https://steph1793.github.io/blog/blog/3D_point_based/">MLP Point based methods</a>
+  * <a href="https://steph1793.github.io/blog/blog/3D_point_based/"> PointNet</a>
+  * <a href="https://steph1793.github.io/blog/blog/3D_point_based#pointnet++"> PointNet++</a>
+* <a href="https://steph1793.github.io/blog/blog/3D_point_convolution/"> Convolution Point Based methods</a>
+  * <a href="https://steph1793.github.io/blog/blog/3D_point_convolution/"> PointCNN</a>
   * <a href=""> KPConv</a>
-* <a href="{% link _posts/2020-11-08-3D_pointvoxel_based.markdown %}"> Point-Voxel Based methods</a>
-  * <a href="{% link _posts/2020-11-08-3D_pointvoxel_based.markdown %}"> PVCNN</a>
-* <a href="{% link _posts/2020-11-08-3D_mvpnet.markdown %}"> Multi-Modal Based methods</a>
-  * <a href="{% link _posts/2020-11-08-3D_mvpnet.markdown %}"> MVPNet</a>
+* <a href="https://steph1793.github.io/blog/blog/3D_pointvoxel_based/"> Point-Voxel Based methods</a>
+  * <a href="https://steph1793.github.io/blog/blog/3D_pointvoxel_based/"> PVCNN</a>
+* <a href="https://steph1793.github.io/blog/blog/3D_mvpnet/"> Multi-Modal Based methods</a>
+  * <a href="https://steph1793.github.io/blog/blog/3D_mvpnet/"> MVPNet</a>
 * <a href=""> Sparse Convolution Based methods</a>
   * <a href=""> Minkowski</a>
   * <a href=""> SPVCNN/SPVNAS</a>
